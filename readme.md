@@ -12,21 +12,9 @@ In order to use this, you must have some things installed in your machine.  Bear
 
 2. MongoDB - Get it from [https://www.mongodb.com/download-center#community](https://www.mongodb.com/download-center#community)
 
-3. Flask -  If you don't have pip installed (you do if you just got the latest versions of python), you should get it [here](https://pip.pypa.io/en/stable/installing/ "here"). Then, after it is ready, just type into a prompt:
+3. Pip -  If you don't have pip installed (you do if you've got the latest versions of python), you should get it [here](https://pip.pypa.io/en/stable/installing/ "here"). Then, after it is ready, just type into a prompt, inside the folder you cloned:
 ```
-pip install flask
-```
-4. Flask_restful module - Same goes here:
-```
-pip install flask_restful
-```
-5. mongoengine module - And again:
-```
-pip install mongoengine
-```
-6. requests module - And at last:
-```
-pip install requests
+pip install -r requirements.txt
 ```
 
 All set! Damn, that was easy.
@@ -40,7 +28,7 @@ Then, open a terminal and get your MongoDB instance running by typing into it:
 mongod
 ```
 
-Afterwards, open the folder where you clone the repo into and execute the examples.py file:
+Afterwards, open the folder where you cloned the repo into and execute the examples.py file:
 ```
 python examples.py
 ```
@@ -55,20 +43,32 @@ python starwars_api.py
 
 The API consists of two endpoints only.
 
-`localhost:5000/planetlist` accepts no query options, and is accessed only with a `GET` method. This endpoint show a list of the planets currently in your database, with all the info that is associated with them. What are they?
+`localhost:5000/planets` accepts no query options, and is accessed through `GET` and `POST` methods. This endpoint show a list of the planets currently in your database, with all the info that is associated with them. What are they?
 
 `name` - the planet's name.
 `climate` - the planet's climate.
 `terrain` - the planet's terrain.
 `appearance` - a list of movies this planet has made an appearance before. If this is an empty list, than this probably this planet has never appeared on the screen before. Maybe it's new
 
+You can use a `POST` method to add a new planet. The arguments **name**, **climate** and **terrain** are required. E.g.:
+```
+curl -X POST 'localhost:5000/planets' -d 'name=Dagobah&terrain=swamp&climate=murky'
+```
+The id is automatically generated, and the appearance attribute is fetched from the SWAPI, if the planet is found in their database through the name attribute you used.
+
+
+
 The other endpoint is:
 
-`localhost:5000/planets` and is accessible through `GET`, `POST` and `DELETE` methods. More about them:
+`localhost:5000/planets/<planetid>` and is accessible through `GET` and `DELETE` methods. More about them:
 
-`GET` searches the database for a planet with that specific name or respective id.  Requires **name** or **id** attributes.
+`GET` searches the database for a planet with that specific id. The id should replace the <planetid> tag.
 
-Example GET response:
+Example GET request:
+```
+curl -X GET 'localhost:5000/planets/5ac7df83860c93248ca37f54'
+```
+And following response:
 ```
 {
   "appearances": [
@@ -82,9 +82,11 @@ Example GET response:
   "terrain": "swamp"
 }
 ```
-`POST` adds a new entry to the planets database. It requires **name**, **terrain** and **climate** attributes. What it also does is search in the swapi for the appearances this planet has made in the franchise's movies. If it receives none, no sweat, it returns an empty list and adds it to the planet's properties.
 
-`DELETE` deletes an entry, simple as that. Requires **name** or **id** attributes.
+`DELETE` deletes an entry, relative to the id you put in the <planetid> tag, such as:
+```
+curl -X DELETE localhost:5000/5ac7df83860c93248ca37f54
+```
 
 ## The end
 Thanks for your time.

@@ -22,35 +22,14 @@ def make_error(status_code, message):
 # ENDPOINT CREATION
 
 
-class PlanetsList(Resource):
-    def get(self):
-        planets = Planet.objects
-        return jsonify(planets=[i.serialize for i in planets])
-        # gets list of planets
-api.add_resource(PlanetsList, '/planetlist')
-
-
 class Planets(Resource):
     def get(self):
-        if 'id' in request.form:  # check if user searched using and id
-            planetId = request.form['id']
-            try:
-                planet = Planet.objects(id=planetId)
-                return jsonify(planet.serialize)
-            except:
-                return make_error(404, 'could not find a planet with this id')
-
-        elif 'name' in request.form:  # check if user searched using a name
-            planetName = request.form['name']
-            try:
-                planet = Planet.objects.get(name__iexact=planetName)
-                # this is case insensitive
-                return jsonify(planet.serialize)
-            except:
-                return make_error(404, 'could not find a planet with this name')
-
+        if 'name' in request.form:
+            planets = Planet.object(name__iexact=request.form['name'])
         else:
-            return make_error(400, 'you need and id or a name to do this search')
+            planets = Planet.objects
+        return jsonify(planets=[i.serialize for i in planets])
+        # gets list of planets
 
     def post(self):
         if ('name' not in request.form) or ('climate' not in request.form) or \
@@ -86,35 +65,27 @@ class Planets(Resource):
         except:
             return make_error(400, 'something went wrong. check your fields.')
         planets = Planet.objects
-        return {'message': 'planet named {} was added successfully' /
-                           .format(newplanet.name)}
-
-    def delete(self):
-        if 'id' in request.form:  # check if user searched using and id
-            planetId = request.form['id']
-            try:
-                planet = Planet.objects(id=planetId)
-            except:
-                return make_error(404, 'could not find a planet with this id')
-            planet.delete()
-            return {'message': 'planet named {} removed successfully' /
-                               .format(planet.name)}
-
-        # check if user used a name to find the planet
-        elif 'name' in request.form:
-            planetQuery = request.form['name']
-            try:
-                planet = Planet.objects.get(name__iexact=planetQuery)
-            except:
-                return make_error(404, 'could not find a planet with this name')
-            planet.delete()
-            return {'message': 'planet named {} removed successfully'
-                               .format(planet.name)}
-
-        else:  # error handling
-            return make_error(400, 'you need and id or a name to do this search')
-
+        return {'message': 'planet named {} was added successfully'.format(newplanet.name)}
 api.add_resource(Planets, '/planets')
+
+
+class SinglePlanet(Resource):
+    def get(self, planetid):
+        try:
+            planet = Planet.objects.get(id=planetid)
+        except:
+            return make_error(404, 'could not find a planet with this id')
+        return jsonify(planet.serialize)
+
+    def delete(self, planetid):
+        try:
+            planet = Planet.objects.get(id=planetid)
+        except:
+            return make_error(404, 'could not find a planet with this id')
+        planet.delete()
+        return {'message': 'planet named {} removed successfully'.format(planet.name)}
+
+api.add_resource(SinglePlanet, '/planets/<string:planetid>')
 
 
 if __name__ == '__main__':
