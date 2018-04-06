@@ -13,13 +13,17 @@ In order to use this, you must have some things installed in your machine.  Bear
 2. MongoDB - Get it from [https://www.mongodb.com/download-center#community](https://www.mongodb.com/download-center#community)
 
 3. Flask -  If you don't have pip installed (you do if you just got the latest versions of python), you should get it [here](https://pip.pypa.io/en/stable/installing/ "here"). Then, after it is ready, just type into a prompt:
-`pip install flask`
+```pip install flask
+```
 4. Flask_restful module - Same goes here:
-`pip install flask_restful`
+```pip install flask_restful
+```
 5. mongoengine module - And again:
-`pip install mongoengine`
+```pip install mongoengine
+```
 6. requests module - And at last:
-`pip install requests`
+```pip install requests
+```
 
 All set! Damn, that was easy.
 
@@ -28,15 +32,18 @@ All set! Damn, that was easy.
 The API is really easy to set up. First you should clone this repo into your machine.
 
 Then, open a terminal and get your MongoDB instance running by typing into it:
-`mongod`
+```mongod
+```
 
 Afterwards, open the folder where you clone the repo into and execute the examples.py file:
-`python examples.py`
+```python examples.py
+```
 
 This will populate the database with a couple of planets to get you started. This phase is actually optional, but it will enable to see some data from start.
 
 Get the API running by executing:
-`python starwars_api.py`
+```python starwars_api.py
+```
 ## How does it work
 
 The API consists of two endpoints only.
@@ -55,7 +62,7 @@ The other endpoint is:
 `GET` searches the database for a planet with that specific name or respective id.  Requires **name** or **id** attributes.
 
 Example GET response:
->     {
+```{
       "appearances": [
         "The Empire Strikes Back",
         "Revenge of the Sith",
@@ -66,7 +73,7 @@ Example GET response:
       "name": "dagobah",
       "terrain": "swamp"
     }
-
+```
 `POST` adds a new entry to the planets database. It requires **name**, **terrain** and **climate** attributes. What it also does is search in the swapi for the appearances this planet has made in the franchise's movies. If it receives none, no sweat, it returns an empty list and adds it to the planet's properties.
 
 `DELETE` deletes an entry, simple as that. Requires **name** or **id** attributes.
