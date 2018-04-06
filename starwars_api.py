@@ -3,43 +3,56 @@ from flask_restful import Resource, Api
 from mongoengine import *
 import requests
 import json
+from models import Planet
 
 app = Flask(__name__)
-api = Api(app)
+api = Api(app, catch_all_404s=True)
 
 db = connect('planets')
-db.drop_database('planets') # CLEARS DATABASE FOR TESTING
 
-class Planet(Document):
-    name = StringField(required=True)
-    terrain = StringField(max_length=50, required=True)
-    climate = StringField(max_length=50, required=True)
-    appearances = ListField(StringField(max_length=50))
-    @property
-    def serialize(self):
-        """Return object data in serializeable format"""
-        return {
-            'id': str(self.id),
-            'name': self.name,
-            'terrain': self.terrain,
-            'climate': self.climate,
-            'appearances': self.appearances
-        }
+def make_error(status_code, message):
+    response = jsonify({
+     'status': status_code,
+     'message': message
+    })
+    response.status_code = status_code
+    return response
 
-tatooine = Planet(name='tatooine', terrain='desert', climate='arid')
-tatooine.save()
+# ENDPOINT CREATION
 
-hoth = Planet(name='hoth', terrain='tundra', climate='cold')
-hoth.save()
 
 class PlanetsList(Resource):
     def get(self):
         planets = Planet.objects
         return jsonify(planets=[i.serialize for i in planets]) # gets list of planets
+api.add_resource(PlanetsList, '/planetlist')
+
+
+class Planets(Resource):
+    def get(self):
+        if 'id' in request.form: # check if user searched using and id
+            planetId = request.form['id']
+            try:
+                planet = Planet.objects(id=planetId)
+                return jsonify(planet.serialize)
+            except:
+                return make_error(404, 'could not find a planet with this id')
+
+        elif 'name' in request.form: # check if user searched using a name
+            planetName = request.form['name']
+            try:
+                planet = Planet.objects.get(name__iexact=planetName) # this is case insensitive
+                return jsonify(planet.serialize)
+            except:
+                return make_error(404, 'could not find a planet with this name')
+
+        else:
+            return make_error(400, 'you need and id or a name to do this search')
+
     def post(self):
         name = request.form['name']
         if Planet.objects(name__iexact=name): # check if planet has already been added
-            return {'message':'this planet is already in the database'}
+            return make_error(400, 'this planet is already in the database')
 
         climate = request.form['climate']
         terrain = request.form['terrain']
@@ -62,10 +75,34 @@ class PlanetsList(Resource):
         try: # check if fields were filled with proper types
             newplanet.save()
         except:
-             return {'message':'error: something went wrong! check your fields.'}
+             return make_error(400, 'something went wrong. check your fields.')
         planets = Planet.objects
         return  {'message':'planet named {} was added successfully'.format(newplanet.name)}
-api.add_resource(PlanetsList, '/planets')
+
+    def delete(self):
+        if 'id' in request.form: # check if user searched using and id
+            planetId = request.form['id']
+            try:
+                planet = Planet.objects(id=planetId)
+            except:
+                return make_error(404, 'could not find a planet with this id')
+            planet.delete()
+            return {'message' : 'planet named {} removed successfully'.format(planet.name)}
+
+        elif 'name' in request.form: # check if user used a name to find the planet
+            planetQuery = request.form['name']
+            try:
+                planet = Planet.objects.get(name__iexact=planetQuery)
+            except:
+                return make_error(404, 'could not find a planet with this name')
+            planet.delete()
+            return {'message' : 'planet named {} removed successfully'.format(planet.name)}
+
+        else: # error handling
+            return make_error(400, 'you need and id or a name to do this search')
+
+api.add_resource(Planets, '/planets')
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
