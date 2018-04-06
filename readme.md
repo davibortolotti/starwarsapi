@@ -58,9 +58,12 @@ The API consists of two endpoints only.
 `localhost:5000/planetlist` accepts no query options, and is accessed only with a `GET` method. This endpoint show a list of the planets currently in your database, with all the info that is associated with them. What are they?
 
 `name` - the planet's name.
+
 `climate` - the planet's climate.
+
 `terrain` - the planet's terrain.
-`appearance` - a list of movies this planet has made an appearance before. If this is an empty list, than this probably this planet has never appeared on the screen before. Maybe it's new
+
+`appearance` - a list of movies this planet has made an appearance before. If this is an empty list, than probably, this planet has never appeared on screen before. Maybe it's new 😉
 
 The other endpoint is:
 
