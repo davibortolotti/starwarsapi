@@ -46,9 +46,12 @@ The API consists of two endpoints only.
 `localhost:5000/planets` accepts no query options, and is accessed through `GET` and `POST` methods. This endpoint show a list of the planets currently in your database, with all the info that is associated with them. What are they?
 
 `name` - the planet's name.
+
 `climate` - the planet's climate.
+
 `terrain` - the planet's terrain.
-`appearance` - a list of movies this planet has made an appearance before. If this is an empty list, than this probably this planet has never appeared on the screen before. Maybe it's new
+
+`appearance` - a list of movies this planet has made an appearance before. If this is an empty list, than probably, this planet has never appeared on screen before. Maybe it's new 😉
 
 You can use a `POST` method to add a new planet. The arguments **name**, **climate** and **terrain** are required. E.g.:
 ```
