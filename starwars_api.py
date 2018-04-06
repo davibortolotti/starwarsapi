@@ -25,7 +25,7 @@ def make_error(status_code, message):
 class Planets(Resource):
     def get(self):
         if 'name' in request.form:
-            planets = Planet.object(name__iexact=request.form['name'])
+            planets = Planet.objects(name__iexact=request.form['name'])
         else:
             planets = Planet.objects
         return jsonify(planets=[i.serialize for i in planets])
