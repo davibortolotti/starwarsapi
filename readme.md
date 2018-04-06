@@ -36,7 +36,8 @@ All set! Damn, that was easy.
 The API is really easy to set up. First you should clone this repo into your machine.
 
 Then, open a terminal and get your MongoDB instance running by typing into it:
-```mongod
+```
+mongod
 ```
 
 Afterwards, open the folder where you clone the repo into and execute the examples.py file:
