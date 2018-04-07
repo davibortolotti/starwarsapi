@@ -43,13 +43,25 @@ python starwars_api.py
 
 The API consists of two endpoints only.
 
+---
 ### Listing planets and creating new ones
 
 `localhost:5000/planets` is accessed through `GET` and `POST` methods.
 
+
 - `GET`
 
-This endpoint shows a list of the planets currently in your database. **It also accepts a name argument**, that filter the planets through the name you provided.
+This method shows a list of the planets currently in your database.
+
+Example GET request:
+```
+curl -X GET 'localhost:5000/planets/'
+```
+
+**It also accepts a name argument**, that filter the planets through the name you provided. Like this:
+```
+curl -X GET 'localhost:5000/planets?name='Dagobah''
+```
 
 The info displayed is:
 
@@ -61,6 +73,7 @@ The info displayed is:
 
 `appearance` - a list of movies this planet has made an appearance before. If this is an empty list, than probably, this planet has never appeared on screen before. Maybe it's new 😉
 
+
 - `POST`
 
 This method can be used to add a new planet. The arguments **name**, **climate** and **terrain** are required.
@@ -70,10 +83,12 @@ curl -X POST 'localhost:5000/planets' -d 'name=Dagobah&terrain=swamp&climate=mur
 ```
 The id is automatically generated, and the appearance attribute is fetched from the SWAPI, if the planet is found in their database through the name attribute you used.
 
+---
 
 ### Searching or deleting a planet through the id
 
-The `localhost:5000/planets/<planetid>` and is accessible through `GET` and `DELETE` methods. More about them:
+`localhost:5000/planets/<planetid>` is accessible through `GET` and `DELETE` methods. More about them:
+
 
 - `GET`
 
