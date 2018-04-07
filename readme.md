@@ -60,7 +60,7 @@ curl -X GET 'localhost:5000/planets/'
 
 **It also accepts a name argument**, that filter the planets through the name you provided. Like this:
 ```
-curl -X GET 'localhost:5000/planets?name='Dagobah''
+curl -X GET 'localhost:5000/planets?name=Dagobah'
 ```
 
 The info displayed is:
