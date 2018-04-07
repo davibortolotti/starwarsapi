@@ -41,7 +41,7 @@ python starwars_api.py
 ```
 ## How does it work
 
-The API consists of two endpoints only.
+The API consists of two endpoints only, and dumps information in JSON format.
 
 ---
 ### Listing planets and creating new ones
@@ -76,7 +76,7 @@ The info displayed is:
 
 - `POST`
 
-This method can be used to add a new planet. The arguments **name**, **climate** and **terrain** are required.
+This method can be used to add a new planet. The arguments **name** (50 characters limit), **climate**(50 characters limit) and **terrain**(50 characters limit) are required.
 E.g.:
 ```
 curl -X POST 'localhost:5000/planets' -d 'name=Dagobah&terrain=swamp&climate=murky'

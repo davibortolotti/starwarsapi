@@ -3,7 +3,7 @@ from mongoengine import *
 ### models
 
 class Planet(Document):
-    name = StringField(required=True)
+    name = StringField(max_length=50, required=True)
     terrain = StringField(max_length=50, required=True)
     climate = StringField(max_length=50, required=True)
     appearances = ListField(StringField(max_length=50))
