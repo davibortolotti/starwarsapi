@@ -48,7 +48,8 @@ The API consists of two endpoints only.
 `localhost:5000/planets` is accessed through `GET` and `POST` methods.
 
 - `GET`
-This endpoint show a list of the planets currently in your database. **It also accepts a name argument**, that filter the planets through the name you provided.
+
+This endpoint shows a list of the planets currently in your database. **It also accepts a name argument**, that filter the planets through the name you provided.
 
 The info displayed is:
 
@@ -62,7 +63,7 @@ The info displayed is:
 
 - `POST`
 
-Thi method can be used to add a new planet. The arguments **name**, **climate** and **terrain** are required.
+This method can be used to add a new planet. The arguments **name**, **climate** and **terrain** are required.
 E.g.:
 ```
 curl -X POST 'localhost:5000/planets' -d 'name=Dagobah&terrain=swamp&climate=murky'
@@ -75,6 +76,7 @@ The id is automatically generated, and the appearance attribute is fetched from 
 The `localhost:5000/planets/<planetid>` and is accessible through `GET` and `DELETE` methods. More about them:
 
 - `GET`
+
 Searches the database for a planet with that specific id. The id should replace the <planetid> tag.
 
 Example GET request:
@@ -97,6 +99,7 @@ And following response:
 ```
 
 - `DELETE`
+
 Deletes an entry, relative to the id you put in the <planetid> tag, such as:
 ```
 curl -X DELETE localhost:5000/5ac7df83860c93248ca37f54
