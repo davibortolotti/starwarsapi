@@ -58,8 +58,7 @@ class SinglePlanet(Resource):
         except:
             return ApiResponseBuilder.error(404, 'could not find a planet with this id')
         planet.delete()
-        return ApiResponseBuilder.success(200, '',
-                                          'planet named {} removed successfully'.format(planet.name))
+        return ApiResponseBuilder.success(200, 'planet named {} removed successfully'.format(planet.name), None)
 
 api.add_resource(SinglePlanet, '/planets/<string:planetid>')
 
