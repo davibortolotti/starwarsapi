@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from mongoengine import *
-import requests
+
 import json
 from models import Planet
 
@@ -24,47 +24,35 @@ def make_error(status_code, message):
 
 class Planets(Resource):
     def get(self):
-        if 'name' in request.form:
-            planets = Planet.objects(name__iexact=request.form['name'])
+        if 'name' in request.args:
+            planets = Planet.objects(name__iexact=request.args.get('name'))
         else:
             planets = Planet.objects
         return jsonify(planets=[i.serialize for i in planets])
-        # gets list of planets
 
     def post(self):
-        if ('name' not in request.form) or ('climate' not in request.form) or \
-                ('terrain' not in request.form):
+        if ('name' not in request.args) or ('climate' not in request.args) or \
+                ('terrain' not in request.args):
             return make_error(400, 'name, climate and terrain fields are' +
                                    'required to create a planet entry')
-        name = request.form['name']
-        # check if planet has already been added
+
+        name = request.args.get('name')
         if Planet.objects(name__iexact=name):
             return make_error(400, 'this planet is already in the database')
+        climate = request.args.get('climate')
+        terrain = request.args.get('terrain')
+        newplanet = Planet(name=name, terrain=terrain, climate=climate)
+        newplanet.getAppearances()
 
-        climate = request.form['climate']
-        terrain = request.form['terrain']
-
-        # SEARCH SWAPI DATABASE FOR THE PLANET ADDED
-        r = requests.get('https://swapi.co/api/planets/?search={}'.format(name))
-        json_result = r.json()
-
-        if json_result['count'] > 0:
-            # GET THE FILMS ATTRIBUTE
-            films = json_result['results'][0]['films']
-            appearances = len(films)
-        else:
-            appearances = 0
-
-
-        # CREATE NEW MOVIE
-        newplanet = Planet(name=name, terrain=terrain, climate=climate,
-                           appearances=appearances)
         try:  # check if fields were filled with proper types
             newplanet.save()
         except:
             return make_error(400, 'something went wrong. check your fields.')
-        planets = Planet.objects
-        return {'message': 'planet named {} was added successfully'.format(newplanet.name)}
+        response = jsonify(result=newplanet.serialize,
+                           message='planet named {} was added successfully'.format(newplanet.name))
+        response.status_code = 201
+        return response
+
 api.add_resource(Planets, '/planets')
 
 
