@@ -12,16 +12,19 @@ In order to use this, you must have some things installed in your machine.  Bear
 
 2. MongoDB - Get it from [https://www.mongodb.com/download-center#community](https://www.mongodb.com/download-center#community)
 
-3. Pip -  If you don't have pip installed (you do if you've got the latest versions of python), you should get it [here](https://pip.pypa.io/en/stable/installing/ "here"). Then, after it is ready, just type into a prompt, inside the folder you cloned:
-```
-pip install -r requirements.txt
-```
+3. Pip -  If you don't have pip installed (you do if you've got the latest versions of python), you should get it [here](https://pip.pypa.io/en/stable/installing/ "here").
 
 All set! Damn, that was easy.
 
 ## Up and running
 
 The API is really easy to set up. First you should clone this repo into your machine.
+
+After it is ready, just type into a prompt, inside the folder you cloned into:
+
+```
+pip install -r requirements.txt
+```
 
 Then, open a terminal and get your MongoDB instance running by typing into it:
 ```
@@ -35,7 +38,7 @@ python seed.py
 
 This will populate the database with a couple of planets to get you started. This phase is actually optional, but it will enable to see some data from start.
 
-Get the API running by executing:
+Finally, get the API running by executing:
 ```
 python starwars_api.py
 ```
