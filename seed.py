@@ -2,9 +2,9 @@ from mongoengine import *
 from models import Planet
 
 db = connect('planets')
-db.drop_database('planets') # CLEARS DATABASE FOR TESTING
+db.drop_database('planets')  # CLEARS DATABASE FOR TESTING
 
-### POPULATING DATA WITH EXAMPLES
+# POPULATING DATA WITH EXAMPLES
 
 tatooine = Planet(name='dagobah', terrain='swamp', climate='murky',
     appearances=3)
