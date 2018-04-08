@@ -28,9 +28,9 @@ Then, open a terminal and get your MongoDB instance running by typing into it:
 mongod
 ```
 
-Afterwards, open the folder where you cloned the repo into and execute the examples.py file:
+Afterwards, open the folder where you cloned the repo into and execute the seed.py file:
 ```
-python examples.py
+python seed.py
 ```
 
 This will populate the database with a couple of planets to get you started. This phase is actually optional, but it will enable to see some data from start.
@@ -55,7 +55,7 @@ This method shows a list of the planets currently in your database.
 
 Example GET request:
 ```
-curl -X GET 'localhost:5000/planets/'
+curl -X GET 'localhost:5000/planets'
 ```
 
 **It also accepts a name argument**, that filter the planets through the name you provided. Like this:
@@ -90,9 +90,9 @@ e.g.:
 This method can be used to add a new planet. The arguments **name** (50 characters limit), **climate**(50 characters limit) and **terrain**(50 characters limit) are required.
 E.g.:
 ```
-curl -X POST 'localhost:5000/planets' -d 'name=Dagobah&terrain=swamp&climate=murky'
+curl -X POST 'localhost:5000/planets?name=Tatooine&terrain=desert&climate=hot'
 ```
-The id is automatically generated, and the appearances attribute is fetched in the SWAPI, if the planet is found in their database through the name attribute you used.
+The id is automatically generated (a unique set of characters created by mongoengine), and the appearances attribute is fetched in the SWAPI, if the planet is found in their database through the name attribute you used.
 
 ---
 
@@ -124,7 +124,7 @@ And following response:
 
 Deletes an entry, relative to the id you put in the <planetid> tag, such as:
 ```
-curl -X DELETE localhost:5000/5ac7df83860c93248ca37f54
+curl -X DELETE 'localhost:5000/planets/5ac7df83860c93248ca37f54'
 ```
 
 ## The end
