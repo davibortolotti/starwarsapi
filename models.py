@@ -6,7 +6,7 @@ class Planet(Document):
     name = StringField(max_length=50, required=True)
     terrain = StringField(max_length=50, required=True)
     climate = StringField(max_length=50, required=True)
-    appearances = ListField(StringField(max_length=50))
+    appearances = IntField()
     @property
     def serialize(self):
         """Return object data in serializeable format"""

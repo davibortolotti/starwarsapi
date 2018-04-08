@@ -7,11 +7,11 @@ db.drop_database('planets') # CLEARS DATABASE FOR TESTING
 ### POPULATING DATA WITH EXAMPLES
 
 tatooine = Planet(name='dagobah', terrain='swamp', climate='murky',
-    appearances=['The Empire Strikes Back', 'Revenge of the Sith', 'Return of the Jedi'])
+    appearances=3)
 tatooine.save()
 
 hoth = Planet(name='hoth', terrain='tundra', climate='cold',
-    appearances=['The Empire Strikes Back'])
+    appearances=1)
 hoth.save()
 
 print('examples added to the database')

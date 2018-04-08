@@ -43,19 +43,18 @@ class Planets(Resource):
 
         climate = request.form['climate']
         terrain = request.form['terrain']
-        appearances = []
 
         # SEARCH SWAPI DATABASE FOR THE PLANET ADDED
         r = requests.get('https://swapi.co/api/planets/?search={}'.format(name))
         json_result = r.json()
 
         if json_result['count'] > 0:
-            # GET THE FILMS ATTRIBUTES
-            films_urls = json_result['results'][0]['films']
-            # GET EACH FILM'S TITLE
-            for url in films_urls:
-                r = requests.get(url)
-                appearances.append(r.json()['title'])
+            # GET THE FILMS ATTRIBUTE
+            films = json_result['results'][0]['films']
+            appearances = len(films)
+        else:
+            appearances = 0
+
 
         # CREATE NEW MOVIE
         newplanet = Planet(name=name, terrain=terrain, climate=climate,
