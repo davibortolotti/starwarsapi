@@ -71,8 +71,19 @@ The info displayed is:
 
 `terrain` - the planet's terrain.
 
-`appearance` - a list of movies this planet has made an appearance before. If this is an empty list, than probably, this planet has never appeared on screen before. Maybe it's new 😉
+`appearance` - the number of movies this planet has made an appearance before. If this is 0, than probably, this planet has never appeared on screen before. Maybe it's new 😉
 
+e.g.:
+
+```
+{
+   "appearances": 3,
+   "climate": "murky",
+   "id": "5aca4ca4860c93225004e901",
+   "name": "dagobah",
+   "terrain": "swamp"
+}
+```
 
 - `POST`
 
@@ -81,7 +92,7 @@ E.g.:
 ```
 curl -X POST 'localhost:5000/planets' -d 'name=Dagobah&terrain=swamp&climate=murky'
 ```
-The id is automatically generated, and the appearance attribute is fetched from the SWAPI, if the planet is found in their database through the name attribute you used.
+The id is automatically generated, and the appearances attribute is fetched in the SWAPI, if the planet is found in their database through the name attribute you used.
 
 ---
 
@@ -101,11 +112,7 @@ curl -X GET 'localhost:5000/planets/5ac7df83860c93248ca37f54'
 And following response:
 ```
 {
-  "appearances": [
-    "The Empire Strikes Back",
-    "Revenge of the Sith",
-    "Return of the Jedi"
-  ],
+  "appearances": 3,
   "climate": "murky",
   "id": "5ac7df83860c93248ca37f54",
   "name": "dagobah",
