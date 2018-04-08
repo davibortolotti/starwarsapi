@@ -8,6 +8,7 @@ class Planet(Document):
     climate = StringField(smax_length=50, required=True)
     appearances = IntField()
 
+    
     def getAppearances(self):  # SEARCH SWAPI FOR FILM APPEARANCES
         r = requests.get('https://swapi.co/api/planets/?search={}'.format(self.name))
         json_result = r.json()
