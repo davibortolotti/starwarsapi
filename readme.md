@@ -71,7 +71,7 @@ The info displayed is:
 
 `terrain` - the planet's terrain.
 
-`appearance` - the number of movies this planet has made an appearance before. If this is 0, than probably, this planet has never appeared on screen before. Maybe it's new 😉
+`appearances` - the number of movies this planet has made an appearance before. If this is 0, than probably, this planet has never appeared on screen before. Maybe it's new 😉
 
 e.g.:
 
@@ -92,7 +92,7 @@ E.g.:
 ```
 curl -X POST 'localhost:5000/planets?name=Tatooine&terrain=desert&climate=hot'
 ```
-The id is automatically generated (a unique set of characters created by mongoengine), and the appearances attribute is fetched in the SWAPI, if the planet is found in their database through the name attribute you used.
+The id is automatically generated (a unique set of characters created by mongoengine), and the appearances attribute is fetched in the SWAPI, if the planet is found in their database through the name attribute you used. Else, it is set to 0.
 
 ---
 
