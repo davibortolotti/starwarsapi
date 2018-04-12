@@ -1,7 +1,7 @@
 # Star Wars Planet API
 Welcome to the Star Wars Planet API!
 
-This API was made using Python, Flask, MongoDB and with the help of [The Star Wars API](https://swapi.co/ "The Star Wars API"), by Paul Hallett.
+This API was made using **Python**, **Flask**, **MongoDB** and aided by [The Star Wars API](https://swapi.co/ "The Star Wars API"), by Paul Hallett.
 
 With this API you will be able to access a MongoDB database installed in your server, add planets, search, delete and list them.
 
