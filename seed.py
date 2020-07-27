@@ -1,17 +1,29 @@
+import os
+
 from mongoengine import *
 from models import Planet
 
-db = connect('planets', host="mongo")
-db.drop_database('planets')  # CLEARS DATABASE FOR TESTING
+def seed():
+    if os.getenv('env') == "docker":
+        db = connect('planets', host="mongo")
+    else:
+        db = connect('planets')
 
-# POPULATING DATA WITH EXAMPLES
+    db.drop_database('planets')  # CLEARS DATABASE FOR TESTING
 
-tatooine = Planet(name='dagobah', terrain='swamp', climate='murky',
-    appearances=3)
-tatooine.save()
+    # POPULATING DATA WITH EXAMPLES
 
-hoth = Planet(name='hoth', terrain='tundra', climate='cold',
-    appearances=1)
-hoth.save()
+    tatooine = Planet(name='dagobah', terrain='swamp', climate='murky',
+        appearances=3)
+    tatooine.save()
 
-print('examples added to the database')
+    hoth = Planet(name='hoth', terrain='tundra', climate='cold',
+        appearances=1)
+    hoth.save()
+
+    print('examples added to the database')
+
+
+if __name__ == '__main__':
+    seed()
+

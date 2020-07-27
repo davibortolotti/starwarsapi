@@ -1,4 +1,5 @@
 import json
+import os
 
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
@@ -7,14 +8,19 @@ from mongoengine import *
 
 from models import Planet
 from schemas import PlanetSchema
+from seed import seed
 from ApiResponseBuilder import ApiResponseBuilder
 
 
 app = Flask(__name__)
 api = Api(app, catch_all_404s=True)
 
-db = connect('planets', host="mongo")
+if os.getenv('env') == "docker":
+    db = connect('planets', host="mongo")
+else:
+    db = connect('planets')
 
+seed()
 
 class Planets(Resource):
     def get(self):
