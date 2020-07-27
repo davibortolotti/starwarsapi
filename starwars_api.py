@@ -1,67 +1,67 @@
+import json
+
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
+from marshmallow import exceptions as ma_exc
 from mongoengine import *
-from ApiResponseBuilder import ApiResponseBuilder
-import json
+
 from models import Planet
+from schemas import PlanetSchema
+from ApiResponseBuilder import ApiResponseBuilder
+
 
 app = Flask(__name__)
 api = Api(app, catch_all_404s=True)
 
-db = connect('planets')
-
-# ENDPOINT CREATION
+db = connect('planets', host="mongo")
 
 
 class Planets(Resource):
     def get(self):
-        if 'name' in request.args:
-            planets = Planet.objects(name__iexact=request.args.get('name'))
+        if 'terrain' in request.args:
+            planets = Planet.objects(terrain__iexact=request.args.get('terrain'))
+        elif 'climate' in request.args:
+            planets = Planet.objects(climate__iexact=request.args.get('climate'))
         else:
             planets = Planet.objects
-        return jsonify(planets=[i.serialize for i in planets])
+        # print(planets)
+        response = Planet.schema(many=True).dump(planets)
+        return response
 
     def post(self):
-        if ('name' not in request.args) or ('climate' not in request.args) or \
-                ('terrain' not in request.args):
-            return ApiResponseBuilder.error(400, 'name, climate and terrain fields are required to create a planet entry')
-
-        name = request.args.get('name')
-        if Planet.objects(name__iexact=name):
-            return ApiResponseBuilder.error(400, 'this planet is already in the database')
-        climate = request.args.get('climate')
-        terrain = request.args.get('terrain')
-        newplanet = Planet(name=name, terrain=terrain, climate=climate)
-        newplanet.getAppearances()
-
-        try:  # catch error if fields were incorrectly filled
+        try:
+            result = PlanetSchema().load(request.json)
+            newplanet = Planet(**result)
+            if Planet.objects(name__iexact=newplanet.name):
+                return ApiResponseBuilder.error('this planet is already in the database', 404)
+            newplanet.get_appearances()
             newplanet.save()
-        except:
-            return ApiResponseBuilder.error(400, 'something went wrong. check your fields.')
 
-        return ApiResponseBuilder.success(201, 'planet named {} was added successfully'.format(newplanet.name), newplanet.serialize)
+        except ma_exc.ValidationError as err:
+            return ApiResponseBuilder.error(err.messages, 400)
 
-api.add_resource(Planets, '/planets')
+        return ApiResponseBuilder.success(f'planet named {newplanet.name} was added successfully', newplanet.serialized, 201)
 
 
 class SinglePlanet(Resource):
     def get(self, planetid):
         try:
             planet = Planet.objects.get(id=planetid)
-        except:
-            return ApiResponseBuilder.error(404, 'could not find a planet with this id')
-        return jsonify(planet.serialize)
+            return planet.serialized
+        except Exception:
+            return ApiResponseBuilder.error('could not find a planet with this id', 404)
+        
 
     def delete(self, planetid):
         try:
             planet = Planet.objects.get(id=planetid)
-        except:
-            return ApiResponseBuilder.error(404, 'could not find a planet with this id')
+        except Exception:
+            return ApiResponseBuilder.error('could not find a planet with this id', 404)
         planet.delete()
-        return ApiResponseBuilder.success(200, 'planet named {} removed successfully'.format(planet.name), None)
+        return ApiResponseBuilder.success(f'planet named {planet.name} removed successfully', None)
 
+api.add_resource(Planets, '/planets')
 api.add_resource(SinglePlanet, '/planets/<string:planetid>')
-
 
 if __name__ == '__main__':
     app.run(debug=False)

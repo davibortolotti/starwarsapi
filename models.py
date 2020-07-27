@@ -1,16 +1,19 @@
 from mongoengine import *
 import requests
 
+from schemas import PlanetSchema
 
 class Planet(Document):
+
+    schema = PlanetSchema
     name = StringField(max_length=50, required=True)
     terrain = StringField(max_length=50, required=True)
     climate = StringField(smax_length=50, required=True)
     appearances = IntField()
 
-    
-    def getAppearances(self):  # SEARCH SWAPI FOR FILM APPEARANCES
-        r = requests.get('https://swapi.co/api/planets/?search={}'.format(self.name))
+    def get_appearances(self):  
+        """Searches SWAPI to check number of appearances of planet in movies"""
+        r = requests.get(f'https://swapi.dev/api/planets?search={self.name}')
         json_result = r.json()
 
         if json_result['count'] > 0:
@@ -20,12 +23,6 @@ class Planet(Document):
             self.appearances = 0
 
     @property
-    def serialize(self):
+    def serialized(self):
         """Return object data in serializeable format"""
-        return {
-            'id': str(self.id),
-            'name': self.name,
-            'terrain': self.terrain,
-            'climate': self.climate,
-            'appearances': self.appearances
-        }
+        return self.schema().dump(self)

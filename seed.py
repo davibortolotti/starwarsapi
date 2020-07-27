@@ -1,7 +1,7 @@
 from mongoengine import *
 from models import Planet
 
-db = connect('planets')
+db = connect('planets', host="mongo")
 db.drop_database('planets')  # CLEARS DATABASE FOR TESTING
 
 # POPULATING DATA WITH EXAMPLES
